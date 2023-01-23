@@ -142,17 +142,43 @@ def draw_door(t):
 
     door_width = HOUSE_WIDTH / 10
     door_height = HOUSE_HEIGHT / 5
+    doorknob = door_width / 15
 
+    # after drawing house, get to door starting point
     t.right(90)
     t.forward((HOUSE_WIDTH - door_width) / 2)
+
+    # draw door
+    t.fillcolor('#03a9fc')
+    t.begin_fill()
     t.right(90)
     t.forward(door_height)
     t.left(90)
     t.forward(door_width)
     t.left(90)
     t.forward(door_height)
+    t.end_fill()
+
+    # draw doorknob
     t.left(90)
-    t.forward((HOUSE_WIDTH + door_width) / 2)
+    t.forward(door_width * 0.8)
+    t.left(90)
+    t.penup()
+    t.forward(door_height / 2)
+    t.pendown()
+    t.fillcolor('#f5d60f')
+    t.begin_fill()
+    t.circle(doorknob)
+    t.end_fill()
+    t.penup()
+    t.left(180)
+    t.forward(door_height / 2)
+
+    # go back to position before drawing door
+    t.left(90)
+    t.forward(HOUSE_WIDTH / 2 - door_width / 5)
+
+    # go back to orientation before drawing door
     t.right(90)
 
 
