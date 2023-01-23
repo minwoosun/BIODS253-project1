@@ -42,7 +42,7 @@ def draw_branches(t, tree_width):
     """Draw branches for the tree
 
     Params:
-        t: the Tutle object.
+        t: the Turtle object.
         tree_width: width of the tree
     """
 
@@ -66,7 +66,7 @@ def draw_tree(t):
     """Draw a tree 
 
     Params:
-        t: the Tutle object.
+        t: the Turtle object.
     """
 
     # tree trunk
@@ -99,7 +99,7 @@ def draw_all_trees(t):
     """Draw two trees, one on each side of the house
 
     Params:
-        t: the Tutle object.
+        t: the Turtle object.
     """
 
     # move to right tree
@@ -123,10 +123,46 @@ def draw_all_trees(t):
     draw_tree(t)
 
 
+def draw_windows(t):
+    """Draw four windows on the house
+
+    Params:
+        t: the Turtle object.
+    """
+
+    pass
+
+
+def draw_door(t):
+    """Draw door of house in the middle and touching the bottom
+
+    Params:
+        t: the Turtle object.
+    """
+
+    door_width = HOUSE_WIDTH / 10
+    door_height = HOUSE_HEIGHT / 5
+
+    t.right(90)
+    t.forward((HOUSE_WIDTH - door_width) / 2)
+    t.right(90)
+    t.forward(door_height)
+    t.left(90)
+    t.forward(door_width)
+    t.left(90)
+    t.forward(door_height)
+    t.left(90)
+    t.forward((HOUSE_WIDTH + door_width) / 2)
+    t.right(90)
+
+
+
 def main():
     t = turtle.Turtle()
     draw_bounding_box(t)
     draw_house(t)
+    draw_door(t)
+    draw_windows(t)
     draw_all_trees(t)
     turtle.done()
 
