@@ -9,6 +9,12 @@ TREE_HEIGHT = 250
 TREE_WIDTH = 30
 STARTING_X = -550
 STARTING_Y = -400
+WINDOW_SIZE = 80
+FIRST_STORY = 250
+SECOND_STORY = 150
+N_WINDOWS = 8
+
+
 
 def draw_bounding_box(t):
     t.fillcolor('lightblue')
@@ -30,12 +36,15 @@ def draw_house(t):
     t.penup()
     t.goto(STARTING_X + (BOUNDING_WIDTH - HOUSE_WIDTH)/2, STARTING_Y)
     t.seth(90)
+    t.fillcolor("#f571cb")
+    t.begin_fill()
     t.pendown()
     t.forward(HOUSE_HEIGHT)
     t.right(90)
     t.forward(HOUSE_WIDTH)
     t.right(90)
     t.forward(HOUSE_HEIGHT)
+    t.end_fill()
 
 
 def draw_branches(t, tree_width):
@@ -121,6 +130,104 @@ def draw_all_trees(t):
 
     # draw left tree 
     draw_tree(t)
+
+
+def draw_all_windows(t, windows_per_row):
+    """Draw four windows on the house
+
+    Params:
+        t: the Turtle object.
+    """
+    start_loc = t.pos()
+    margin = (HOUSE_WIDTH - (2 * windows_per_row - 1) * WINDOW_SIZE) / 2
+
+    t.penup()
+    t.seth(90)
+    t.forward(FIRST_STORY)
+    t.left(90)
+    t.forward(margin)
+    t.pendown()
+    draw_window(t)
+    for i in range(windows_per_row - 1):
+        t.penup()
+        t.forward(2*WINDOW_SIZE)
+        t.pendown()
+        draw_window(t)
+
+    t.penup()
+    t.seth(90)
+    t.forward(SECOND_STORY)
+    t.right(90)
+    t.forward(2*(windows_per_row - 1) * WINDOW_SIZE)
+    t.left(180)
+    t.pendown()
+    draw_window(t)
+    for i in range(windows_per_row - 1):
+        t.penup()
+        t.seth(180)
+        t.forward(2*WINDOW_SIZE)
+        t.pendown()
+        draw_window(t)
+
+    t.penup()
+    t.goto(start_loc)
+    t.pendown()
+    t.seth(270)
+
+
+def draw_window(t):
+    t.fillcolor("darkgray")
+    t.begin_fill()
+    for i in range(4):
+        t.forward(WINDOW_SIZE)
+        t.left(90)
+    t.end_fill()
+
+
+def draw_door(t, door_width, door_height):
+    """Draw door of house in the middle and touching the bottom
+
+    Params:
+        t: the Turtle object.
+    """
+
+    doorknob = door_width / 15
+
+    # save starting position for later
+    start_loc = t.pos()
+
+    # after drawing house, get to door starting point
+    t.right(90)
+    t.forward(HOUSE_WIDTH * 0.75)
+
+    # draw door
+    t.fillcolor('#03a9fc')
+    t.begin_fill()
+    t.right(90)
+    t.forward(door_height)
+    t.left(90)
+    t.forward(door_width)
+    t.left(90)
+    t.forward(door_height)
+    t.end_fill()
+
+    # draw doorknob
+    t.left(90)
+    t.forward(door_width * 0.8)
+    t.left(90)
+    t.penup()
+    t.forward(door_height / 2)
+    t.pendown()
+    draw_circle(t, doorknob, '#f5d60f')
+    t.penup()
+    t.left(180)
+    t.forward(door_height / 2)
+
+    # go back to position before drawing door
+    t.goto(start_loc)
+
+    # go back to orientation before drawing door
+    #t.right(90)
 
 
 def draw_garage(t, garage_width, garage_height):
@@ -233,6 +340,7 @@ def draw_circle(t, rad, col="white"):
     t.begin_fill()
     t.circle(rad)
     t.end_fill()
+    t.pencolor("black")
 
 
 def draw_cloud(t, rad=30, col="white", x_start=0, y_start=0):
@@ -268,10 +376,13 @@ def draw_all_clouds(t):
     draw_cloud(t, x_start=-350, y_start=250)
 
 
+
 def main():
     t = turtle.Turtle()
     draw_bounding_box(t)
     draw_house(t)
+    draw_door(t, HOUSE_WIDTH/8, HOUSE_HEIGHT/4)
+    draw_all_windows(t, N_WINDOWS//2)
     draw_all_trees(t)
     draw_all_clouds(t)
     draw_all_garages(t, HOUSE_WIDTH/5, HOUSE_HEIGHT/4)
@@ -279,4 +390,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
