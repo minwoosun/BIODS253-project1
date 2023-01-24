@@ -34,6 +34,6 @@ above.
 - [x] One or more clouds
 
 ## Deliverables:
-- [ ] A public or private github repository to which you’ve added me (vijayp) as a collaborator
-- [ ] A short video (one minute or less) that you’ve made with your team (you can record this on zoom if you’d like) where you describe your design and quickly walk us through your solution.  Talk about what worked well, and what was difficult.
+- [x] A public or private github repository to which you’ve added me (vijayp) as a collaborator
+- [x] A short video (one minute or less) that you’ve made with your team (you can record this on zoom if you’d like) where you describe your design and quickly walk us through your solution.  Talk about what worked well, and what was difficult.
 - [x] Write a readme file that makes it easy for someone not familiar with this program or language to download, install, run your tests if any, and then run your code.
