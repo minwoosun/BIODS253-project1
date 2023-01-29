@@ -8,9 +8,6 @@ import tempfile
 import os.path
 import house
 
-#import os 
-#os.environ["PATH"] += ":/usr/local/bin:/usr/local/bin/gs"
-
 
 class TestShapes(unittest.TestCase):
     def _compare_canvas_to_expected(self, expected_filename):
