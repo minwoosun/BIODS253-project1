@@ -34,8 +34,8 @@ class TestShapes(unittest.TestCase):
         turtle.reset()
         turtle.speed("fastest")
         turtle.tracer(0,0)
-        turtle.screensize(canvwidth=800, canvheight=800, bg=None)
-
+        turtle.setup(1200, 1200)
+        turtle.screensize(canvwidth=1200, canvheight=1200, bg=None)
 
     def test_full_image(self):
 
