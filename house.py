@@ -392,8 +392,8 @@ def draw_all_clouds(t):
 
 
 
-def main():
-    t = turtle.Turtle()
+def main(t):
+
     draw_bounding_box(t)
     draw_house(t)
     draw_door(t, HOUSE_WIDTH/8, HOUSE_HEIGHT/4)
@@ -401,7 +401,10 @@ def main():
     draw_all_trees(t)
     draw_all_clouds(t)
     draw_all_garages(t, HOUSE_WIDTH/5, HOUSE_HEIGHT/4)
-    turtle.done()
+
 
 if __name__ == "__main__":
-    main()
+    t = turtle.Turtle()
+    main(t)
+    turtle.done()
+
