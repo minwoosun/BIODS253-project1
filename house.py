@@ -13,6 +13,8 @@ WINDOW_SIZE = 80
 FIRST_STORY = 250
 SECOND_STORY = 150
 N_WINDOWS = 8
+CLOUD_X = [400, 450, 350, -400, -350]
+CLOUD_HEIGHT = 250
 
 TRUNCK_COLOR = 'brown'
 BRANCH_COLOR = 'green'
@@ -344,52 +346,48 @@ def draw_all_garages(t, garage_width, garage_height):
     draw_garage_windows(t, window_width, window_height, garage_width, garage_height)
 
 
-def draw_circle(t, rad, col="white"):
+def draw_circle(t, radius, color="white"):
     """Draw a circle.
     Params:
         t: the Tutle object
-        rad: radius of the circle
-        col: color of the circle
+        radius: radius of the circle
+        color: color of the circle
     """
-    t.color(col,col)
+    t.color(color, color)
     t.begin_fill()
-    t.circle(rad)
+    t.circle(radius)
     t.end_fill()
     t.pencolor("black")
 
 
-def draw_cloud(t, rad=30, col="white", x_start=0, y_start=0):
+def draw_cloud(t, radius=30, color="white", x_start=0, y_start=0):
     """Draw a cloud. 
     Params:
         t: the Tutle object
-        rad: radius of the circle
-        col: color of the circle
+        radius: radius of the circle
+        color: color of the circle
         x_start: x coordinate for starting pos
         y_start: y coordinate for starting pos
     """
     t.penup()
     t.goto(x_start, y_start)
     t.pendown()
-    draw_circle(t, rad, col)
+    draw_circle(t, radius, color)
     t.right(90)
-    draw_circle(t, rad, col)
+    draw_circle(t, radius, color)
     t.right(90)
-    draw_circle(t, rad, col)
+    draw_circle(t, radius, color)
     t.right(90)
-    draw_circle(t, rad, col)
+    draw_circle(t, radius, color)
     
   
-def draw_all_clouds(t):
+def draw_all_clouds(t, CLOUD_X, CLOUD_HEIGHT):
     """Draw two clouds.
     Params:
         t: the Tutle object.
     """
-    draw_cloud(t, x_start=400, y_start=250)
-    draw_cloud(t, x_start=450, y_start=250)
-    draw_cloud(t, x_start=350, y_start=250)
-    draw_cloud(t, x_start=-400, y_start=250)
-    draw_cloud(t, x_start=-350, y_start=250)
-
+    for position in CLOUD_X:
+        draw_cloud(t, x_start=position, y_start=CLOUD_HEIGHT)
 
 
 def main(t):
@@ -399,7 +397,7 @@ def main(t):
     draw_door(t, HOUSE_WIDTH/8, HOUSE_HEIGHT/4)
     draw_all_windows(t, N_WINDOWS//2)
     draw_all_trees(t)
-    draw_all_clouds(t)
+    draw_all_clouds(t, CLOUD_X, CLOUD_HEIGHT)
     draw_all_garages(t, HOUSE_WIDTH/5, HOUSE_HEIGHT/4)
 
 
