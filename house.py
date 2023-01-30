@@ -14,7 +14,9 @@ FIRST_STORY = 250
 SECOND_STORY = 150
 N_WINDOWS = 8
 
-
+TRUNCK_COLOR = 'brown'
+BRANCH_COLOR = 'green'
+BRANCH_ANGLE = 180-45
 
 def draw_bounding_box(t):
     t.fillcolor('lightblue')
@@ -55,14 +57,17 @@ def draw_branches(t, tree_width):
         tree_width: width of the tree
     """
 
-    t.fillcolor('green')
+    # isosceles right triangle length
+    length = tree_width * math.sqrt(2)
+
+    t.fillcolor(BRANCH_COLOR)
     t.begin_fill()
     t.forward(tree_width)
-    t.left(135)
-    t.forward(tree_width * 2 / math.sqrt(2))
+    t.left(BRANCH_ANGLE)
+    t.forward(length)
     t.left(90)
-    t.forward(tree_width * 2 / math.sqrt(2))
-    t.left(135)
+    t.forward(length)
+    t.left(BRANCH_ANGLE)
     t.forward(tree_width)
     t.end_fill()
     t.penup()
@@ -79,7 +84,7 @@ def draw_tree(t):
     """
 
     # tree trunk
-    t.fillcolor('brown')
+    t.fillcolor(TRUNCK_COLOR)
     t.begin_fill()
     t.left(90)
     t.forward(TREE_HEIGHT)
@@ -111,16 +116,26 @@ def draw_all_trees(t):
         t: the Turtle object.
     """
 
-    # move to right tree
-    gap = (BOUNDING_WIDTH - HOUSE_WIDTH)/4 - TREE_WIDTH/2
+    # get width space for the two sides of the house
+    side_widths = (BOUNDING_WIDTH - HOUSE_WIDTH)
+
+    # get half the width space for one of the side 
+    half_w = side_widths / 4
+
+    # set starting point to half of side width - half tree width 
+    gap =  half_w - TREE_WIDTH/2
+
+    # move to starting point
     t.left(90)
     t.forward(gap)
 
     # draw right tree 
     draw_tree(t)
 
+    # move to the other side (1/2 side width + house width)
+    gap = half_w + HOUSE_WIDTH
+
     # move to left tree 
-    gap = (BOUNDING_WIDTH - HOUSE_WIDTH)/4 + HOUSE_WIDTH
     t.penup()
     t.goto(400.00, -400.00)
     t.pendown()
@@ -377,8 +392,8 @@ def draw_all_clouds(t):
 
 
 
-def main():
-    t = turtle.Turtle()
+def main(t):
+
     draw_bounding_box(t)
     draw_house(t)
     draw_door(t, HOUSE_WIDTH/8, HOUSE_HEIGHT/4)
@@ -386,7 +401,10 @@ def main():
     draw_all_trees(t)
     draw_all_clouds(t)
     draw_all_garages(t, HOUSE_WIDTH/5, HOUSE_HEIGHT/4)
-    turtle.done()
+
 
 if __name__ == "__main__":
-    main()
+    t = turtle.Turtle()
+    main(t)
+    turtle.done()
+
