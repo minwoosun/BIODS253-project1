@@ -13,6 +13,9 @@ from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPDF, renderPM
 
 CANVAS_SIZE = (1400, 1000)
+HOUSE_WIDTH = 700
+HOUSE_HEIGHT = 500
+N_WINDOWS = 8
 
 
 class TestShapes(unittest.TestCase):
@@ -59,7 +62,7 @@ class TestShapes(unittest.TestCase):
     def test_garages(self):
         # draw two garages with house.py
         house.draw_all_garages(
-            self._turtle, house.HOUSE_WIDTH / 5, house.HOUSE_HEIGHT / 4
+            self._turtle, HOUSE_WIDTH / 5, HOUSE_HEIGHT / 4
         )
         # compare these garages to the correct garages.png
         self.assertIsNone(
@@ -69,7 +72,7 @@ class TestShapes(unittest.TestCase):
     def test_door(self):
         # draw door with house.py
         house.draw_door(
-            self._turtle, house.HOUSE_WIDTH / 8, house.HOUSE_HEIGHT / 4
+            self._turtle, HOUSE_WIDTH / 8, HOUSE_HEIGHT / 4
         )
         # compare door to the correct door.png
         self.assertIsNone(
@@ -79,7 +82,7 @@ class TestShapes(unittest.TestCase):
     def test_windows(self):
         # draw eight windows with house.py
         house.draw_all_windows(
-            self._turtle, house.N_WINDOWS // 2
+            self._turtle, N_WINDOWS // 2
         )
         # compare these windows to the correct windows.png
         self.assertIsNone(
