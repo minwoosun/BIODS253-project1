@@ -1,51 +1,59 @@
 #!/usr/bin/env python3
 
 from PIL import Image
-import turtle
 import matplotlib.testing.compare as mpcompare
 import unittest
+import house
 import tempfile
 import os.path
-import house
+import svg_turtle
+import inspect
 
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF, renderPM
+
+CANVAS_SIZE = (1400,1000)
 
 class TestShapes(unittest.TestCase):
-    def _compare_canvas_to_expected(self, expected_filename):
+    def _compare_canvas_to_expected(self, expected_filename, override_tmpdir=None):
         ''' compares the current canvas to an expected file.
-        Returns None if and only if the files are identical'''
+        Returns None if and only if the files are identical.
+        
+        If override_tmpdir is set, use that directory for temporary files 
+        (useful for generating known good testdata images.
+        '''
 
         TOLERANCE = 1.0 # somewhere between 0 and 255, higher is more lax.
 
         with tempfile.TemporaryDirectory() as tmp_dirname:
-            actual_ps = os.path.join(tmp_dirname, 'canvas.ps')
-            actual_png = os.path.join(tmp_dirname, 'canvas.png')
-            canvas = turtle.getcanvas()
+            calling_function = inspect.stack()[1][3]
+            tmp_dirname = tmp_dirname if not override_tmpdir else override_tmpdir
+
+            actual_svg = os.path.join(tmp_dirname, '%s.svg' % calling_function)
+            actual_png = os.path.join(tmp_dirname, '%s.png' % calling_function)
+            self._turtle.save_as(actual_svg)
             
-            # canvas generates a postscript file, but we have to convert it to a png in
+            # canvas generates a svg file, but we have to convert it to a png in
             # order to compare it using matplotlib's library
-            canvas.postscript(file=actual_ps)
-            with Image.open(actual_ps) as im:
-                im.save(actual_png)
+            drawing = svg2rlg(actual_svg)
+            renderPM.drawToFile(drawing, actual_png, fmt="PNG")
             return mpcompare.compare_images(expected_filename, actual_png, TOLERANCE)
 
 
     def setUp(self):
         # this is run before every test
-        turtle.reset()
-        turtle.speed("fastest")
-        turtle.tracer(0,0)
-        turtle.setup(1200, 1200)
-        turtle.screensize(canvwidth=1200, canvheight=1200, bg=None)
+        self._turtle = svg_turtle.SvgTurtle(*CANVAS_SIZE)
+        self._turtle.reset()
+        self._turtle.speed("fastest")
+        #self._turtle.tracer(0,0)
 
     def test_full_image(self):
-
-        t = turtle.getturtle()
-        house.main(t)
-        turtle.hideturtle()
-
-        # compare this 20,20,20 turtle against the well-known turtle png
+        # generate full house drawing
+        house.main(self._turtle)
+        # compare this house drawing to the correct house.png
         self.assertIsNone(self._compare_canvas_to_expected(expected_filename='testdata/house.png'))
-
 
 if __name__ == '__main__':
     unittest.main()
+
+
