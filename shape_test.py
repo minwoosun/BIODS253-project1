@@ -32,6 +32,7 @@ class TestShapes(unittest.TestCase):
 
             actual_svg = os.path.join(tmp_dirname, "%s.svg" % calling_function)
             actual_png = os.path.join(tmp_dirname, "%s.png" % calling_function)
+
             self._turtle.save_as(actual_svg)
 
             # canvas generates a svg file, but we have to convert it to a png in
@@ -63,6 +64,26 @@ class TestShapes(unittest.TestCase):
         # compare these garages to the correct garages.png
         self.assertIsNone(
             self._compare_canvas_to_expected(expected_filename="testdata/garages.png")
+        )
+
+    def test_door(self):
+        # draw door with house.py
+        house.draw_door(
+            self._turtle, house.HOUSE_WIDTH / 8, house.HOUSE_HEIGHT / 4
+        )
+        # compare door to the correct door.png
+        self.assertIsNone(
+            self._compare_canvas_to_expected(expected_filename="testdata/door.png")
+        )
+
+    def test_windows(self):
+        # draw eight windows with house.py
+        house.draw_all_windows(
+            self._turtle, house.N_WINDOWS // 2
+        )
+        # compare these windows to the correct windows.png
+        self.assertIsNone(
+            self._compare_canvas_to_expected(expected_filename="testdata/windows.png")
         )
 
 
