@@ -64,6 +64,16 @@ class TestShapes(unittest.TestCase):
         self.assertIsNone(
             self._compare_canvas_to_expected(expected_filename="testdata/garages.png")
         )
+    
+    def test_clouds(self):
+    # draw clouds with house.py
+        house.draw_all_clouds(
+            self._turtle, house.CLOUD_X, house.CLOUD_HEIGHT
+        )
+        # compare these clouds to the correct cloudss.png
+        self.assertIsNone(
+            self._compare_canvas_to_expected(expected_filename="testdata/clouds.png")
+        )
 
 
 if __name__ == "__main__":
