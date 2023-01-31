@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import turtle
 import math
 
@@ -20,6 +22,21 @@ TRUNCK_COLOR = 'brown'
 BRANCH_COLOR = 'green'
 BRANCH_ANGLE = 180-45
 
+
+def draw_circle(t, radius, color="white"):
+    """Draw a circle.
+    Params:
+        t: the Tutle object
+        radius: radius of the circle
+        color: color of the circle
+    """
+    t.color(color, color)
+    t.begin_fill()
+    t.circle(radius)
+    t.end_fill()
+    t.pencolor("black")
+
+
 def draw_bounding_box(t):
     t.fillcolor('lightblue')
     t.penup()
@@ -35,6 +52,7 @@ def draw_bounding_box(t):
     t.left(90)
     t.forward(BOUNDING_HEIGHT)
     t.end_fill()
+
 
 def draw_house(t):
     t.penup()
@@ -77,6 +95,7 @@ def draw_branches(t, tree_width):
     t.forward(tree_width)
     t.right(90)
     t.pendown()
+
 
 def draw_tree(t):
     """Draw a tree 
@@ -149,6 +168,15 @@ def draw_all_trees(t):
     draw_tree(t)
 
 
+def draw_window(t):
+    t.fillcolor("darkgray")
+    t.begin_fill()
+    for i in range(4):
+        t.forward(WINDOW_SIZE)
+        t.left(90)
+    t.end_fill()
+
+    
 def draw_all_windows(t, windows_per_row):
     """Draw four windows on the house
 
@@ -191,15 +219,6 @@ def draw_all_windows(t, windows_per_row):
     t.goto(start_loc)
     t.pendown()
     t.seth(270)
-
-
-def draw_window(t):
-    t.fillcolor("darkgray")
-    t.begin_fill()
-    for i in range(4):
-        t.forward(WINDOW_SIZE)
-        t.left(90)
-    t.end_fill()
 
 
 def draw_door(t, door_width, door_height):
@@ -347,20 +366,6 @@ def draw_all_garages(t, garage_width, garage_height):
     t.goto(STARTING_X + BOUNDING_WIDTH/2 + 6 * garage_width/5, STARTING_Y)
     draw_garage(t, garage_width, garage_height)
     draw_garage_windows(t, window_width, window_height, garage_width, garage_height)
-
-
-def draw_circle(t, radius, color="white"):
-    """Draw a circle.
-    Params:
-        t: the Tutle object
-        radius: radius of the circle
-        color: color of the circle
-    """
-    t.color(color, color)
-    t.begin_fill()
-    t.circle(radius)
-    t.end_fill()
-    t.pencolor("black")
 
 
 def draw_cloud(t, radius=30, color="white", x_start=0, y_start=0):
