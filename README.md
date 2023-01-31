@@ -17,13 +17,20 @@ conda env create -f environment.yml
 ## Development 
 Code for drawing all components of the house is contained in **house.py**.
 
-To test the implementation, please run: 
+To draw the house, please run:
 ```
 python house.py
 ```
 
 By default, the drawing of the house should look exactly like the screenshot
 above.
+
+To test the implementation, please run:
+```
+python shape_test.py
+```
+`shape_test.py` contains 6 unit tests that test various elements of the house,
+in addition to the house as a whole.
 
 
 ## Your house must have:
