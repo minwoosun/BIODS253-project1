@@ -21,12 +21,21 @@ CLOUD_HEIGHT = 250
 TRUNCK_COLOR = 'brown'
 BRANCH_COLOR = 'green'
 BRANCH_ANGLE = 180-45
+HOUSE_COLOR = "#f571cb"
+SKY_COLOR = "lightblue"
+PEN_COLOR = "black"
+CLOUD_COLOR = "white"
+WINDOW_COLOR = "darkgray"
+DOOR_COLOR = '#03a9fc'
+DOORKNOB_COLOR = '#f5d60f'
+GARAGE_COLOR = 'grey'
+GARAGE_WINDOW_COLOR = 'white'
 
 
-def draw_circle(t, radius, color="white"):
+def draw_circle(t, radius, color=CLOUD_COLOR):
     """Draw a circle.
     Params:
-        t: the Tutle object
+        t: the Turtle object
         radius: radius of the circle
         color: color of the circle
     """
@@ -34,11 +43,15 @@ def draw_circle(t, radius, color="white"):
     t.begin_fill()
     t.circle(radius)
     t.end_fill()
-    t.pencolor("black")
+    t.pencolor(PEN_COLOR)
 
 
 def draw_bounding_box(t):
-    t.fillcolor('lightblue')
+    """Draw bounding box to put house in.
+    Params:
+        t: the Turtle object
+    """
+    t.fillcolor(SKY_COLOR)
     t.penup()
     t.goto(STARTING_X, STARTING_Y)
     t.seth(0)
@@ -55,10 +68,14 @@ def draw_bounding_box(t):
 
 
 def draw_house(t):
+    """Draw outline of house and make it pink.
+    Params:
+        t: the Turtle object
+    """
     t.penup()
     t.goto(STARTING_X + (BOUNDING_WIDTH - HOUSE_WIDTH)/2, STARTING_Y)
     t.seth(90)
-    t.fillcolor("#f571cb")
+    t.fillcolor(HOUSE_COLOR)
     t.begin_fill()
     t.pendown()
     t.forward(HOUSE_HEIGHT)
@@ -169,21 +186,29 @@ def draw_all_trees(t):
 
 
 def draw_window(t):
-    t.fillcolor("darkgray")
+    """Draw a row of 4 windows
+
+    Params:
+        t: the Turtle object.
+    """
+    t.fillcolor(WINDOW_COLOR)
     t.begin_fill()
     for i in range(4):
         t.forward(WINDOW_SIZE)
         t.left(90)
     t.end_fill()
 
-    
+
 def draw_all_windows(t, windows_per_row):
     """Draw four windows on the house
 
     Params:
         t: the Turtle object.
+        windows_per_row: number of windows per row
     """
     start_loc = t.pos()
+
+    # distance between window and edge of house to be nicely spaced
     margin = (HOUSE_WIDTH - (2 * windows_per_row - 1) * WINDOW_SIZE) / 2
 
     t.penup()
@@ -222,10 +247,12 @@ def draw_all_windows(t, windows_per_row):
 
 
 def draw_door(t, door_width, door_height):
-    """Draw door of house in the middle and touching the bottom
+    """Draw door of house, touching the bottom
 
     Params:
         t: the Turtle object.
+        door_width: width of door
+        door_height: height of door
     """
 
     doorknob = door_width / 15
@@ -240,7 +267,7 @@ def draw_door(t, door_width, door_height):
 
     # draw door
     t.pendown()
-    t.fillcolor('#03a9fc')
+    t.fillcolor(DOOR_COLOR)
     t.begin_fill()
     t.forward(door_height)
     t.left(90)
@@ -256,7 +283,7 @@ def draw_door(t, door_width, door_height):
     t.penup()
     t.forward(door_height / 2)
     t.pendown()
-    draw_circle(t, doorknob, '#f5d60f')
+    draw_circle(t, doorknob, DOORKNOB_COLOR)
     t.penup()
     t.left(180)
     t.forward(door_height / 2)
@@ -279,7 +306,7 @@ def draw_garage(t, garage_width, garage_height):
     """
 
     t.pendown()
-    t.fillcolor('grey')
+    t.fillcolor(GARAGE_COLOR)
     t.begin_fill()
     t.seth(90)
     t.forward(garage_height)
@@ -300,7 +327,7 @@ def draw_garage_window(t, window_width, window_height):
     """
 
     t.pendown()
-    t.fillcolor('white')
+    t.fillcolor(GARAGE_WINDOW_COLOR)
     t.begin_fill()
     t.forward(window_height)
     t.right(90)
@@ -368,10 +395,10 @@ def draw_all_garages(t, garage_width, garage_height):
     draw_garage_windows(t, window_width, window_height, garage_width, garage_height)
 
 
-def draw_cloud(t, radius=30, color="white", x_start=0, y_start=0):
+def draw_cloud(t, radius=30, color=CLOUD_COLOR, x_start=0, y_start=0):
     """Draw a cloud. 
     Params:
-        t: the Tutle object
+        t: the Turtle object
         radius: radius of the circle
         color: color of the circle
         x_start: x coordinate for starting pos
@@ -389,13 +416,15 @@ def draw_cloud(t, radius=30, color="white", x_start=0, y_start=0):
     draw_circle(t, radius, color)
     
   
-def draw_all_clouds(t, CLOUD_X, CLOUD_HEIGHT):
+def draw_all_clouds(t, cloud_x, cloud_height):
     """Draw two clouds.
     Params:
-        t: the Tutle object.
+        t: the Turtle object.
+        cloud_x: starting x positions
+        cloud_height: starting cloud height
     """
-    for position in CLOUD_X:
-        draw_cloud(t, x_start=position, y_start=CLOUD_HEIGHT)
+    for position in cloud_x:
+        draw_cloud(t, x_start=position, y_start=cloud_height)
 
 
 def main(t):
