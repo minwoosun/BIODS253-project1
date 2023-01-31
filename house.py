@@ -366,8 +366,8 @@ def draw_all_garages(t, garage_width, garage_height):
     garage_x_locations = [0, 6 * garage_width / 5]
 
     # draw garages at garage_x_locations
-    for i in range(len(garage_x_locations)):
-        t.goto(garage_x_start + garage_x_locations[i], STARTING_Y)
+    for x_value in garage_x_locations:
+        t.goto(garage_x_start + x_value, STARTING_Y)
         draw_rectangle(t, garage_width, garage_height, GARAGE_COLOR)
         t.right(180)
         t.forward(garage_width)
