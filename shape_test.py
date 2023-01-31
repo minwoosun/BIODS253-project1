@@ -59,6 +59,16 @@ class TestShapes(unittest.TestCase):
             self._compare_canvas_to_expected(expected_filename="testdata/house.png")
         )
 
+    def test_trees(self):
+        # generate full house drawing
+        house.draw_all_trees(self._turtle)
+
+        # compare this house drawing to the correct house.png
+        self.assertIsNone(
+            self._compare_canvas_to_expected(expected_filename="testdata/trees.png")
+        )
+
+
     def test_garages(self):
         # draw two garages with house.py
         house.draw_all_garages(
