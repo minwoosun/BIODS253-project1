@@ -159,6 +159,7 @@ def draw_all_windows(t, windows_per_row):
     margin = (HOUSE_WIDTH - (2 * windows_per_row - 1) * WINDOW_SIZE) / 2
 
     t.penup()
+    t.goto(STARTING_X + BOUNDING_WIDTH / 2 + HOUSE_WIDTH / 2, STARTING_Y)
     t.seth(90)
     t.forward(FIRST_STORY)
     t.left(90)
@@ -214,13 +215,14 @@ def draw_door(t, door_width, door_height):
     start_loc = t.pos()
 
     # after drawing house, get to door starting point
-    t.right(90)
-    t.forward(HOUSE_WIDTH * 0.75)
+    t.penup()
+    t.goto(STARTING_X + BOUNDING_WIDTH / 2 - HOUSE_WIDTH / 4, STARTING_Y)
+    t.seth(90)
 
     # draw door
+    t.pendown()
     t.fillcolor('#03a9fc')
     t.begin_fill()
-    t.right(90)
     t.forward(door_height)
     t.left(90)
     t.forward(door_width)
@@ -239,12 +241,13 @@ def draw_door(t, door_width, door_height):
     t.penup()
     t.left(180)
     t.forward(door_height / 2)
+    t.pendown()
+    t.left(90)
+    t.forward(door_width * 0.2)
+    t.penup()
 
     # go back to position before drawing door
     t.goto(start_loc)
-
-    # go back to orientation before drawing door
-    #t.right(90)
 
 
 def draw_garage(t, garage_width, garage_height):

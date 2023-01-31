@@ -1,7 +1,7 @@
 # BIODS253 Project 1
 This repository contains the code to draw the following house.
 
-![house image](./house.png)
+![house image](testdata/house.png)
 
 ## Usage 
 Start by cloning the repository to your local directory:
