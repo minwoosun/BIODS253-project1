@@ -26,12 +26,11 @@ def single_house_scene(t, tilt= 0, scale=1, right_offset=0, crack=False):
         t, DOOR_WIDTH, DOOR_HEIGHT, scale=scale, right_offset=right_offset, tilt=tilt)
     # Draw windows
     if crack:
-        pass
+        draw_all_cracked_windows(t, right_offset=right_offset, scale=scale, tilt=tilt)
     else:
         draw_all_windows(
             t, windows_per_row=4, scale=scale, right_offset=right_offset, tilt= tilt
         )
-
 
     # Draw Garage Doors
     draw_all_garages(
@@ -56,7 +55,7 @@ if __name__ == "__main__":
     reduced_scale_factor = 0.9
     nominal_offset = 400
     single_house_scene(
-        t, tilt=0, scale=nominal_scale_factor,right_offset=nominal_offset
+        t, tilt=0, scale=nominal_scale_factor, right_offset=nominal_offset
     )
 
     single_house_scene(
