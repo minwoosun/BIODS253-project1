@@ -21,6 +21,8 @@ SECOND_STORY = 150
 N_WINDOWS = 8
 CLOUD_X = [400, 450, 350, -400, -350]
 CLOUD_HEIGHT = 250
+ZAG_NUMBER = 8
+ZAG_DEGREE = 200
 FULL_TREE_WIDTH = 4 * TREE_WIDTH
 
 TRUNCK_COLOR = "brown"
@@ -203,6 +205,84 @@ def draw_all_trees(t):
     draw_tree(t)
 
 
+def cracked_window(t, num_zag):
+
+    window_diagonal = WINDOW_SIZE / math.cos(ZAG_DEGREE - 180)
+    diagonal_zag_length = window_diagonal / num_zag
+    zag_line_length = diagonal_zag_length / (2 * 2**(1/2))
+    draw_window(t)  # using the original window function
+
+    t.seth(200)
+    zag_back = 0
+    for h in range(2):
+        if zag_back == 1:
+            t.penup()
+        for i in range(num_zag - 1):
+            t.forward(zag_line_length * (-1)**h)
+            t.left(90)
+            t.forward(zag_line_length * (-1)**h)
+            t.right(90)
+        zag_back = zag_back + 1
+        t.pendown()
+    t.seth(180)
+
+def draw_all_cracked_windows(t):
+
+    start_loc = t.pos()
+
+    # distance between window and edge of house to be nicely spaced
+    margin = (HOUSE_WIDTH - (N_WINDOWS - 1) * WINDOW_SIZE) / 2
+
+    t.penup()
+    t.goto(STARTING_X + BOUNDING_WIDTH / 2 + HOUSE_WIDTH / 2, STARTING_Y)
+    t.seth(90)
+    t.forward(FIRST_STORY)
+    t.left(90)
+    t.forward(margin)
+    t.pendown()
+    cracked_window(t, ZAG_NUMBER)
+    for i in range(int(N_WINDOWS / 2) - 1):
+        if i//2 == 1:
+            t.penup()
+            t.forward(2 * WINDOW_SIZE)
+            t.pendown()
+            cracked_window(t, 10)
+        else:
+            t.penup()
+            t.forward(2 * WINDOW_SIZE)
+            t.pendown()
+            draw_window(t)
+
+    t.penup()
+    t.seth(90)
+    t.forward(SECOND_STORY)
+    t.right(90)
+    t.forward(2 * (N_WINDOWS / 2 - 1) * WINDOW_SIZE)
+    t.left(180)
+    t.pendown()
+    cracked_window(t, ZAG_NUMBER)
+    for i in range(int(N_WINDOWS / 2) - 1):
+        if i//2 == 1:
+            t.penup()
+            t.seth(180)
+            t.forward(2 * WINDOW_SIZE)
+            t.pendown()
+            cracked_window(t, ZAG_NUMBER)
+        else:
+            t.penup()
+            t.seth(180)
+            t.forward(2 * WINDOW_SIZE)
+            t.pendown()
+            draw_window(t)
+
+
+
+    t.penup()
+    t.goto(start_loc)
+    t.pendown()
+    t.seth(270)
+
+
 def draw_window(t, scale=1):
     """Draw a row of 4 windows
 
@@ -249,6 +329,7 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0, tilt=0):
     t.forward(margin)
     t.pendown()
     t.seth(180+tilt)
+
     draw_window(t, scale=scale)
     for _ in range(windows_per_row - 1):
         t.penup()
@@ -264,8 +345,9 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0, tilt=0):
     t.left(180)
     t.pendown()
     t.seth(180 + tilt)
+
     draw_window(t, scale=scale)
-    for i in range(windows_per_row - 1):
+    for _ in range(windows_per_row - 1):
         t.penup()
         t.seth(180+tilt)
         t.forward(2 * window_size)

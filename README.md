@@ -18,20 +18,35 @@ conda env create -f environment.yml
 Code for drawing all components of the house is contained in **house.py**.
 
 To draw the house, please run:
-```
-python house.py
+```bash
+$ python house.py
 ```
 
 By default, the drawing of the house should look exactly like the screenshot
 above.
 
 To test the implementation, please run:
-```
-python shape_test.py
+```bash 
+$ python shape_test.py
 ```
 `shape_test.py` contains 6 unit tests that test various elements of the house,
 in addition to the house as a whole.
 
+## Generating Pre- and Post-Earthquake Scenes
+A "generate_springfield.sh" script is included to generate either the pre- or
+post-earthquake scene. To generate the pre-earthquake scene, please run the
+following from the root directory of this package:
+
+```bash
+$ bash generate_springfield.sh no_earthquake
+```
+
+To generate the post-earthquake scene, please run the following from the root
+directory of this package:
+
+```bash
+$ bash generate_springfield.sh earthquake
+```
 
 ## Your house must have:
 - [x] At least 4 windows
