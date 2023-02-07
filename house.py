@@ -14,7 +14,7 @@ GARAGE_DOOR_HEIGHT = HOUSE_HEIGHT / 4
 TREE_HEIGHT = 250
 TREE_WIDTH = 30
 STARTING_X = -550
-STARTING_Y = -400
+STARTING_Y =  -200 #-400
 WINDOW_SIZE = 80
 FIRST_STORY = 250
 SECOND_STORY = 150
@@ -74,7 +74,7 @@ def draw_bounding_box(t):
     t.end_fill()
 
 
-def draw_house(t, scale=1, right_offset=0):
+def draw_house(t, scale=1, right_offset=0, tilt=0):
     """Draw outline of house and make it pink.
 
     Params:
@@ -91,7 +91,7 @@ def draw_house(t, scale=1, right_offset=0):
         STARTING_X + right_offset +
         (BOUNDING_WIDTH - house_width) / 2, STARTING_Y
     )
-    t.seth(90)
+    t.seth(90+tilt)
     t.fillcolor(HOUSE_COLOR)
     t.begin_fill()
     t.pendown()
@@ -219,7 +219,7 @@ def draw_window(t, scale=1):
     t.end_fill()
 
 
-def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
+def draw_all_windows(t, windows_per_row, scale=1, right_offset=0, tilt=0):
     """Draw four windows on the house
 
     Params:
@@ -248,6 +248,7 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     t.left(90)
     t.forward(margin)
     t.pendown()
+    t.seth(180+tilt)
     draw_window(t, scale=scale)
     for _ in range(windows_per_row - 1):
         t.penup()
@@ -262,10 +263,11 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     t.forward(2 * (windows_per_row - 1) * window_size)
     t.left(180)
     t.pendown()
+    t.seth(180 + tilt)
     draw_window(t, scale=scale)
     for i in range(windows_per_row - 1):
         t.penup()
-        t.seth(180)
+        t.seth(180+tilt)
         t.forward(2 * window_size)
         t.pendown()
         draw_window(t, scale=scale)
@@ -276,7 +278,7 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     t.seth(270)
 
 
-def draw_door(t, door_width, door_height, scale=1, right_offset=0):
+def draw_door(t, door_width, door_height, scale=1, right_offset=0, tilt=0):
     """Draw door of house, touching the bottom
 
     Params:
@@ -302,7 +304,7 @@ def draw_door(t, door_width, door_height, scale=1, right_offset=0):
         STARTING_X + right_offset +
         BOUNDING_WIDTH / 2 - house_width / 4, STARTING_Y
     )
-    t.seth(90)
+    t.seth(90+tilt)
 
     # draw door
     t.pendown()
@@ -335,7 +337,7 @@ def draw_door(t, door_width, door_height, scale=1, right_offset=0):
     t.goto(start_loc)
 
 
-def draw_rectangle(t, width, height, color):
+def draw_rectangle(t, width, height, color, tilt=0):
     """Draw a rectangle starting at the bottom left corner
 
     Params:
@@ -347,7 +349,7 @@ def draw_rectangle(t, width, height, color):
     t.pendown()
     t.fillcolor(color)
     t.begin_fill()
-    t.seth(90)
+    t.seth(90+tilt)
     t.forward(height)
     t.right(90)
     t.forward(width)
@@ -359,7 +361,7 @@ def draw_rectangle(t, width, height, color):
     t.end_fill()
 
 
-def draw_garage_windows(t, window_width, window_height, garage_width, garage_height):
+def draw_garage_windows(t, window_width, window_height, garage_width, garage_height, tilt=0):
     """Draw two garage windows 
 
     Params:
@@ -381,16 +383,16 @@ def draw_garage_windows(t, window_width, window_height, garage_width, garage_hei
     t.forward(window_y)
 
     # draw window 1
-    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR)
+    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR, tilt=tilt)
 
     # move to window 2 location
     t.forward(window_x)
 
     # draw window 2
-    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR)
+    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR, tilt=tilt)
 
 
-def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0):
+def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0, tilt=0):
     """Draw two garages next to each other
 
     Params:
@@ -412,11 +414,13 @@ def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0):
     # draw garages at garage_x_locations
     for x_value in garage_x_locations:
         t.goto(garage_x_start + x_value, STARTING_Y)
-        draw_rectangle(t, garage_width, garage_height, GARAGE_COLOR)
+        t.seth(90 - tilt)
+        draw_rectangle(t, garage_width, garage_height, GARAGE_COLOR, tilt=tilt)
         t.right(180)
         t.forward(garage_width)
+        t.seth(tilt)
         draw_garage_windows(
-            t, window_width, window_height, garage_width, garage_height
+            t, window_width, window_height, garage_width, garage_height, tilt=tilt
         )
 
 
