@@ -76,7 +76,7 @@ def draw_bounding_box(t):
     t.end_fill()
 
 
-def draw_house(t, scale=1, right_offset=0):
+def draw_house(t, scale=1, right_offset=0, tilt=0):
     """Draw outline of house and make it pink.
 
     Params:
@@ -93,7 +93,7 @@ def draw_house(t, scale=1, right_offset=0):
         STARTING_X + right_offset +
         (BOUNDING_WIDTH - house_width) / 2, STARTING_Y
     )
-    t.seth(90)
+    t.seth(90+tilt)
     t.fillcolor(HOUSE_COLOR)
     t.begin_fill()
     t.pendown()
@@ -205,19 +205,22 @@ def draw_all_trees(t):
     draw_tree(t)
 
 
-def cracked_window(t, num_zag):
+
+def cracked_window(t, num_zag, scale=1, tilt=0):
     """Draws a window with a zigzag shaped crack.
 
     Params:
         t: the Turtle object.
         num_zag: the number of individual zags in the zigzag
+        scale: scaling size of window
+        tilt: tilt of window
     """
-
-    window_diagonal = WINDOW_SIZE / math.cos(ZAG_DEGREE - 180)  # find length of diagonal across window at desired angle
-    diagonal_zag_length = window_diagonal / num_zag  # finding the total displacement of the zag line
-    zag_line_length = diagonal_zag_length / (2 * 2 ** (1 / 2))  # size of each individual zag
-    draw_window(t)  # using the original window function
-
+    window_size= scale * WINDOW_SIZE 
+    window_diagonal = window_size / math.cos(ZAG_DEGREE - 180)  # find length of diagonal across window at desired angle
+    diagonal_zag_length = window_diagonal / num_zag # finding the total displacement of the zag line
+    zag_line_length = diagonal_zag_length / (2 * 2**(1/2)) # size of each individual zag
+    draw_window(t, scale)  # using the original window function
+    
     t.seth(200)
     zag_back = 0
     for h in range(2):  # create zig zag line and return turtle to start location
@@ -233,60 +236,74 @@ def cracked_window(t, num_zag):
     t.seth(180)
 
 
-def draw_all_cracked_windows(t):
+def draw_all_cracked_windows(t, right_offset=0, scale=1, tilt=0):
     """Draws all the windows from the original pre-earthquake state, but adds a crack through each of them".
-
     Params:
         t: the Turtle object.
+        right_offset: right_offset of window
+        scale: size scaling of window
+        tilt: tilt of window
     """
     start_loc = t.pos()
 
+    house_width = scale * HOUSE_WIDTH
+    window_size = scale * WINDOW_SIZE
+    first_story = scale * FIRST_STORY
+    second_story = scale * SECOND_STORY
+
     # distance between window and edge of house to be nicely spaced
-    margin = (HOUSE_WIDTH - (N_WINDOWS - 1) * WINDOW_SIZE) / 2
+    margin = (house_width - (N_WINDOWS - 1) * window_size) / 2
 
     t.penup()
-    t.goto(STARTING_X + BOUNDING_WIDTH / 2 + HOUSE_WIDTH / 2, STARTING_Y)
+    t.goto(STARTING_X + right_offset + BOUNDING_WIDTH / 2 + house_width / 2, STARTING_Y)
     t.seth(90)
-    t.forward(FIRST_STORY)
+    t.forward(first_story)
     t.left(90)
     t.forward(margin)
     t.pendown()
-    cracked_window(t, ZAG_NUMBER)
-    # create first row of windows with half the windows cracked
+
+    t.seth(180 + tilt)
+    # First row of windows
+    cracked_window(t, ZAG_NUMBER, scale=scale)
+
+    t.seth(180+tilt)
     for i in range(int(N_WINDOWS / 2) - 1):
         if i // 2 == 1:
             t.penup()
-            t.forward(2 * WINDOW_SIZE)
+            t.forward(2 * window_size)
             t.pendown()
-            cracked_window(t, 10)
+            cracked_window(t, 10, scale=scale)
         else:
             t.penup()
-            t.forward(2 * WINDOW_SIZE)
+            t.forward(2 * window_size)
             t.pendown()
-            draw_window(t)
-    # move to location of second window row
+
+           # move to location of second window row
+            draw_window(t, scale=scale)
+      
     t.penup()
     t.seth(90)
-    t.forward(SECOND_STORY)
+    t.forward(second_story)
     t.right(90)
-    t.forward(2 * (N_WINDOWS / 2 - 1) * WINDOW_SIZE)
+    t.forward(2 * (N_WINDOWS / 2 - 1) * window_size)
     t.left(180)
     t.pendown()
-    # create the second row of windows with half of the windows cracked
-    cracked_window(t, ZAG_NUMBER)
+
+    t.seth(180 + tilt)
+    cracked_window(t, ZAG_NUMBER, scale=scale)
     for i in range(int(N_WINDOWS / 2) - 1):
         if i // 2 == 1:
             t.penup()
-            t.seth(180)
-            t.forward(2 * WINDOW_SIZE)
+            t.seth(180+tilt)
+            t.forward(2 * window_size)
             t.pendown()
-            cracked_window(t, ZAG_NUMBER)
+            cracked_window(t, ZAG_NUMBER, scale=scale)
         else:
             t.penup()
-            t.seth(180)
-            t.forward(2 * WINDOW_SIZE)
+            t.seth(180+tilt)
+            t.forward(2 * window_size)
             t.pendown()
-            draw_window(t)
+            draw_window(t, scale=scale)
 
     # move turtle to the start location
     t.penup()
@@ -311,7 +328,7 @@ def draw_window(t, scale=1):
     t.end_fill()
 
 
-def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
+def draw_all_windows(t, windows_per_row, scale=1, right_offset=0, tilt=0):
     """Draw four windows on the house
 
     Params:
@@ -340,6 +357,7 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     t.left(90)
     t.forward(margin)
     t.pendown()
+    t.seth(180+tilt)
 
     draw_window(t, scale=scale)
     for _ in range(windows_per_row - 1):
@@ -355,11 +373,12 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     t.forward(2 * (windows_per_row - 1) * window_size)
     t.left(180)
     t.pendown()
+    t.seth(180 + tilt)
 
     draw_window(t, scale=scale)
     for _ in range(windows_per_row - 1):
         t.penup()
-        t.seth(180)
+        t.seth(180+tilt)
         t.forward(2 * window_size)
         t.pendown()
         draw_window(t, scale=scale)
@@ -370,7 +389,7 @@ def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     t.seth(270)
 
 
-def draw_door(t, door_width, door_height, scale=1, right_offset=0):
+def draw_door(t, door_width, door_height, scale=1, right_offset=0, tilt=0):
     """Draw door of house, touching the bottom
 
     Params:
@@ -396,7 +415,7 @@ def draw_door(t, door_width, door_height, scale=1, right_offset=0):
         STARTING_X + right_offset +
         BOUNDING_WIDTH / 2 - house_width / 4, STARTING_Y
     )
-    t.seth(90)
+    t.seth(90+tilt)
 
     # draw door
     t.pendown()
@@ -429,7 +448,7 @@ def draw_door(t, door_width, door_height, scale=1, right_offset=0):
     t.goto(start_loc)
 
 
-def draw_rectangle(t, width, height, color):
+def draw_rectangle(t, width, height, color, tilt=0):
     """Draw a rectangle starting at the bottom left corner
 
     Params:
@@ -441,7 +460,7 @@ def draw_rectangle(t, width, height, color):
     t.pendown()
     t.fillcolor(color)
     t.begin_fill()
-    t.seth(90)
+    t.seth(90+tilt)
     t.forward(height)
     t.right(90)
     t.forward(width)
@@ -453,7 +472,7 @@ def draw_rectangle(t, width, height, color):
     t.end_fill()
 
 
-def draw_garage_windows(t, window_width, window_height, garage_width, garage_height):
+def draw_garage_windows(t, window_width, window_height, garage_width, garage_height, tilt=0):
     """Draw two garage windows 
 
     Params:
@@ -475,16 +494,16 @@ def draw_garage_windows(t, window_width, window_height, garage_width, garage_hei
     t.forward(window_y)
 
     # draw window 1
-    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR)
+    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR, tilt=tilt)
 
     # move to window 2 location
     t.forward(window_x)
 
     # draw window 2
-    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR)
+    draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR, tilt=tilt)
 
 
-def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0):
+def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0, tilt=0):
     """Draw two garages next to each other
 
     Params:
@@ -506,11 +525,13 @@ def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0):
     # draw garages at garage_x_locations
     for x_value in garage_x_locations:
         t.goto(garage_x_start + x_value, STARTING_Y)
-        draw_rectangle(t, garage_width, garage_height, GARAGE_COLOR)
+        t.seth(90 - tilt)
+        draw_rectangle(t, garage_width, garage_height, GARAGE_COLOR, tilt=tilt)
         t.right(180)
         t.forward(garage_width)
+        t.seth(tilt)
         draw_garage_windows(
-            t, window_width, window_height, garage_width, garage_height
+            t, window_width, window_height, garage_width, garage_height, tilt=tilt
         )
 
 
