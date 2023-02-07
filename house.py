@@ -415,7 +415,6 @@ def draw_all_clouds(t, cloud_x, cloud_height):
 
 
 def main(t):
-
     draw_bounding_box(t)
     draw_house(t)
     draw_door(t, HOUSE_WIDTH / 8, HOUSE_HEIGHT / 4)
