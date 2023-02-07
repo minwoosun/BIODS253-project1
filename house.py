@@ -7,6 +7,10 @@ BOUNDING_HEIGHT = 800
 BOUNDING_WIDTH = 1200
 HOUSE_HEIGHT = 500
 HOUSE_WIDTH = 700
+DOOR_WIDTH = HOUSE_WIDTH / 8
+DOOR_HEIGHT = HOUSE_HEIGHT / 4
+GARAGE_DOOR_WIDTH = HOUSE_WIDTH / 5
+GARAGE_DOOR_HEIGHT = HOUSE_HEIGHT / 4
 TREE_HEIGHT = 250
 TREE_WIDTH = 30
 STARTING_X = -550
@@ -17,6 +21,7 @@ SECOND_STORY = 150
 N_WINDOWS = 8
 CLOUD_X = [400, 450, 350, -400, -350]
 CLOUD_HEIGHT = 250
+FULL_TREE_WIDTH = 4 * TREE_WIDTH
 
 TRUNCK_COLOR = "brown"
 BRANCH_COLOR = "green"
@@ -34,6 +39,7 @@ GARAGE_WINDOW_COLOR = "white"
 
 def draw_circle(t, radius, color=CLOUD_COLOR):
     """Draw a circle.
+
     Params:
         t: the Turtle object
         radius: radius of the circle
@@ -48,6 +54,7 @@ def draw_circle(t, radius, color=CLOUD_COLOR):
 
 def draw_bounding_box(t):
     """Draw bounding box to put house in.
+
     Params:
         t: the Turtle object
     """
@@ -67,16 +74,23 @@ def draw_bounding_box(t):
     t.end_fill()
 
 
-def draw_house(t, scale= 1):
+def draw_house(t, scale=1, right_offset=0):
     """Draw outline of house and make it pink.
+
     Params:
         t: the Turtle object
+        scale: scale of the house, default is 1
+        right_offset: rightward offset from the center of the bounding box
+            (negative values denote leftward offset), default is 0
     """
-    house_height= scale * HOUSE_HEIGHT
-    house_width= scale * HOUSE_WIDTH
+    house_height = scale * HOUSE_HEIGHT
+    house_width = scale * HOUSE_WIDTH
 
     t.penup()
-    t.goto(STARTING_X + (BOUNDING_WIDTH - house_width) / 2, STARTING_Y)
+    t.goto(
+        STARTING_X + right_offset +
+        (BOUNDING_WIDTH - house_width) / 2, STARTING_Y
+    )
     t.seth(90)
     t.fillcolor(HOUSE_COLOR)
     t.begin_fill()
@@ -122,8 +136,8 @@ def draw_tree(t, scale=1):
     Params:
         t: the Turtle object.
     """
-    tree_width= scale * TREE_WIDTH
-    tree_height= scale * TREE_HEIGHT
+    tree_width = scale * TREE_WIDTH
+    tree_height = scale * TREE_HEIGHT
 
     # tree trunk
     t.fillcolor(TRUNCK_COLOR)
@@ -205,46 +219,56 @@ def draw_window(t, scale=1):
     t.end_fill()
 
 
-def draw_all_windows(t, windows_per_row):
+def draw_all_windows(t, windows_per_row, scale=1, right_offset=0):
     """Draw four windows on the house
 
     Params:
         t: the Turtle object.
         windows_per_row: number of windows per row
+        scale: scale of the house, default is 1
+        right_offset: rightward offset from the center of the bounding box
+            (negative values denote leftward offset), default is 0
     """
     start_loc = t.pos()
 
+    house_width = scale * HOUSE_WIDTH
+    window_size = scale * WINDOW_SIZE
+    first_story = scale * FIRST_STORY
+    second_story = scale * SECOND_STORY
+
     # distance between window and edge of house to be nicely spaced
-    margin = (HOUSE_WIDTH - (2 * windows_per_row - 1) * WINDOW_SIZE) / 2
+    margin = (house_width - (2 * windows_per_row - 1) * window_size) / 2
 
     t.penup()
-    t.goto(STARTING_X + BOUNDING_WIDTH / 2 + HOUSE_WIDTH / 2, STARTING_Y)
+    t.goto(
+        STARTING_X + right_offset +
+        BOUNDING_WIDTH / 2 + house_width / 2, STARTING_Y)
     t.seth(90)
-    t.forward(FIRST_STORY)
+    t.forward(first_story)
     t.left(90)
     t.forward(margin)
     t.pendown()
-    draw_window(t)
-    for i in range(windows_per_row - 1):
+    draw_window(t, scale=scale)
+    for _ in range(windows_per_row - 1):
         t.penup()
-        t.forward(2 * WINDOW_SIZE)
+        t.forward(2 * window_size)
         t.pendown()
-        draw_window(t)
+        draw_window(t, scale=scale)
 
     t.penup()
     t.seth(90)
-    t.forward(SECOND_STORY)
+    t.forward(second_story)
     t.right(90)
-    t.forward(2 * (windows_per_row - 1) * WINDOW_SIZE)
+    t.forward(2 * (windows_per_row - 1) * window_size)
     t.left(180)
     t.pendown()
-    draw_window(t)
+    draw_window(t, scale=scale)
     for i in range(windows_per_row - 1):
         t.penup()
         t.seth(180)
-        t.forward(2 * WINDOW_SIZE)
+        t.forward(2 * window_size)
         t.pendown()
-        draw_window(t)
+        draw_window(t, scale=scale)
 
     t.penup()
     t.goto(start_loc)
@@ -252,16 +276,20 @@ def draw_all_windows(t, windows_per_row):
     t.seth(270)
 
 
-def draw_door(t, door_width, door_height, scale=1):
+def draw_door(t, door_width, door_height, scale=1, right_offset=0):
     """Draw door of house, touching the bottom
 
     Params:
         t: the Turtle object.
         door_width: width of door
         door_height: height of door
+        scale: scale factor, default is 1
+        right_offset: rightward offset from the center of the bounding box
+            (negative values denote leftward offset), default is 0
     """
-    door_width= scale * door_width
-    door_height= scale * door_height
+    door_width = scale * door_width
+    door_height = scale * door_height
+    house_width = scale * HOUSE_WIDTH
 
     doorknob = door_width / 15
 
@@ -270,7 +298,10 @@ def draw_door(t, door_width, door_height, scale=1):
 
     # after drawing house, get to door starting point
     t.penup()
-    t.goto(STARTING_X + BOUNDING_WIDTH / 2 - HOUSE_WIDTH / 4, STARTING_Y)
+    t.goto(
+        STARTING_X + right_offset +
+        BOUNDING_WIDTH / 2 - house_width / 4, STARTING_Y
+    )
     t.seth(90)
 
     # draw door
@@ -359,18 +390,23 @@ def draw_garage_windows(t, window_width, window_height, garage_width, garage_hei
     draw_rectangle(t, window_width, window_height, GARAGE_WINDOW_COLOR)
 
 
-def draw_all_garages(t, garage_width, garage_height):
+def draw_all_garages(t, garage_width, garage_height, scale=1, right_offset=0):
     """Draw two garages next to each other
 
     Params:
         t: the Turtle object.
         garage_width: the width of the garage
         garage_height: the height of the garage
+        scale: scale factor, default is 1
+        right_offset: rightward offset from the center of the bounding box
+            (negative values denote leftward offset), default is 0
     """
+    garage_width *= scale
+    garage_height *= scale
     window_width = garage_width / 3
     window_height = garage_height / 7
     t.penup()
-    garage_x_start = STARTING_X + BOUNDING_WIDTH / 2
+    garage_x_start = STARTING_X + right_offset + BOUNDING_WIDTH / 2
     garage_x_locations = [0, 6 * garage_width / 5]
 
     # draw garages at garage_x_locations
@@ -379,11 +415,14 @@ def draw_all_garages(t, garage_width, garage_height):
         draw_rectangle(t, garage_width, garage_height, GARAGE_COLOR)
         t.right(180)
         t.forward(garage_width)
-        draw_garage_windows(t, window_width, window_height, garage_width, garage_height)
+        draw_garage_windows(
+            t, window_width, window_height, garage_width, garage_height
+        )
 
 
 def draw_cloud(t, radius=30, color=CLOUD_COLOR, x_start=0, y_start=0):
-    """Draw a cloud. 
+    """Draw a cloud.
+
     Params:
         t: the Turtle object
         radius: radius of the circle
@@ -417,11 +456,11 @@ def draw_all_clouds(t, cloud_x, cloud_height):
 def main(t):
     draw_bounding_box(t)
     draw_house(t)
-    draw_door(t, HOUSE_WIDTH / 8, HOUSE_HEIGHT / 4)
+    draw_door(t, DOOR_WIDTH, DOOR_HEIGHT)
     draw_all_windows(t, N_WINDOWS // 2)
     draw_all_trees(t)
     draw_all_clouds(t, CLOUD_X, CLOUD_HEIGHT)
-    draw_all_garages(t, HOUSE_WIDTH / 5, HOUSE_HEIGHT / 4)
+    draw_all_garages(t, GARAGE_DOOR_WIDTH, GARAGE_DOOR_HEIGHT)
 
 
 if __name__ == "__main__":
