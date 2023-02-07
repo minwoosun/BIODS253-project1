@@ -14,7 +14,7 @@ GARAGE_DOOR_HEIGHT = HOUSE_HEIGHT / 4
 TREE_HEIGHT = 250
 TREE_WIDTH = 30
 STARTING_X = -550
-STARTING_Y =  -200 #-400
+STARTING_Y = -400
 WINDOW_SIZE = 80
 FIRST_STORY = 250
 SECOND_STORY = 150
@@ -205,12 +205,12 @@ def draw_all_trees(t):
     draw_tree(t)
 
 
-def cracked_window(t, num_zag):
-
-    window_diagonal = WINDOW_SIZE / math.cos(ZAG_DEGREE - 180)
+def cracked_window(t, num_zag, scale=1, tilt=0):
+    window_size= scale * WINDOW_SIZE
+    window_diagonal = window_size / math.cos(ZAG_DEGREE - 180)
     diagonal_zag_length = window_diagonal / num_zag
     zag_line_length = diagonal_zag_length / (2 * 2**(1/2))
-    draw_window(t)  # using the original window function
+    draw_window(t, scale)  # using the original window function
 
     t.seth(200)
     zag_back = 0
@@ -226,54 +226,65 @@ def cracked_window(t, num_zag):
         t.pendown()
     t.seth(180)
 
-def draw_all_cracked_windows(t):
+def draw_all_cracked_windows(t, right_offset=0, scale=1, tilt=0):
 
     start_loc = t.pos()
 
+    house_width = scale * HOUSE_WIDTH
+    window_size = scale * WINDOW_SIZE
+    first_story = scale * FIRST_STORY
+    second_story = scale * SECOND_STORY
+
     # distance between window and edge of house to be nicely spaced
-    margin = (HOUSE_WIDTH - (N_WINDOWS - 1) * WINDOW_SIZE) / 2
+    margin = (house_width - (N_WINDOWS - 1) * window_size) / 2
 
     t.penup()
-    t.goto(STARTING_X + BOUNDING_WIDTH / 2 + HOUSE_WIDTH / 2, STARTING_Y)
+    t.goto(STARTING_X + right_offset + BOUNDING_WIDTH / 2 + house_width / 2, STARTING_Y)
     t.seth(90)
-    t.forward(FIRST_STORY)
+    t.forward(first_story)
     t.left(90)
     t.forward(margin)
     t.pendown()
-    cracked_window(t, ZAG_NUMBER)
+
+    t.seth(180 + tilt)
+    cracked_window(t, ZAG_NUMBER, scale=scale)
+
+    t.seth(180+tilt)
     for i in range(int(N_WINDOWS / 2) - 1):
         if i//2 == 1:
             t.penup()
-            t.forward(2 * WINDOW_SIZE)
+            t.forward(2 * window_size)
             t.pendown()
-            cracked_window(t, 10)
+            cracked_window(t, 10, scale=scale)
         else:
             t.penup()
-            t.forward(2 * WINDOW_SIZE)
+            t.forward(2 * window_size)
             t.pendown()
-            draw_window(t)
+            draw_window(t, scale=scale)
 
     t.penup()
     t.seth(90)
-    t.forward(SECOND_STORY)
+    t.forward(second_story)
     t.right(90)
-    t.forward(2 * (N_WINDOWS / 2 - 1) * WINDOW_SIZE)
+    t.forward(2 * (N_WINDOWS / 2 - 1) * window_size)
     t.left(180)
     t.pendown()
-    cracked_window(t, ZAG_NUMBER)
+
+    t.seth(180 + tilt)
+    cracked_window(t, ZAG_NUMBER, scale=scale)
     for i in range(int(N_WINDOWS / 2) - 1):
         if i//2 == 1:
             t.penup()
-            t.seth(180)
-            t.forward(2 * WINDOW_SIZE)
+            t.seth(180+tilt)
+            t.forward(2 * window_size)
             t.pendown()
-            cracked_window(t, ZAG_NUMBER)
+            cracked_window(t, ZAG_NUMBER, scale=scale)
         else:
             t.penup()
-            t.seth(180)
-            t.forward(2 * WINDOW_SIZE)
+            t.seth(180+tilt)
+            t.forward(2 * window_size)
             t.pendown()
-            draw_window(t)
+            draw_window(t, scale=scale)
 
 
 
