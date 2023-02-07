@@ -67,22 +67,25 @@ def draw_bounding_box(t):
     t.end_fill()
 
 
-def draw_house(t):
+def draw_house(t, scale= 1):
     """Draw outline of house and make it pink.
     Params:
         t: the Turtle object
     """
+    house_height= scale * HOUSE_HEIGHT
+    house_width= scale * HOUSE_WIDTH
+
     t.penup()
-    t.goto(STARTING_X + (BOUNDING_WIDTH - HOUSE_WIDTH) / 2, STARTING_Y)
+    t.goto(STARTING_X + (BOUNDING_WIDTH - house_width) / 2, STARTING_Y)
     t.seth(90)
     t.fillcolor(HOUSE_COLOR)
     t.begin_fill()
     t.pendown()
-    t.forward(HOUSE_HEIGHT)
+    t.forward(house_height)
     t.right(90)
-    t.forward(HOUSE_WIDTH)
+    t.forward(house_width)
     t.right(90)
-    t.forward(HOUSE_HEIGHT)
+    t.forward(house_height)
     t.end_fill()
 
 
@@ -93,7 +96,6 @@ def draw_branches(t, tree_width):
         t: the Turtle object.
         tree_width: width of the tree
     """
-
     # isosceles right triangle length
     length = tree_width * math.sqrt(2)
 
@@ -114,37 +116,39 @@ def draw_branches(t, tree_width):
     t.pendown()
 
 
-def draw_tree(t):
+def draw_tree(t, scale=1):
     """Draw a tree 
 
     Params:
         t: the Turtle object.
     """
+    tree_width= scale * TREE_WIDTH
+    tree_height= scale * TREE_HEIGHT
 
     # tree trunk
     t.fillcolor(TRUNCK_COLOR)
     t.begin_fill()
     t.left(90)
-    t.forward(TREE_HEIGHT)
+    t.forward(tree_height)
     t.right(90)
-    t.forward(TREE_WIDTH)
+    t.forward(tree_width)
     t.right(90)
-    t.forward(TREE_HEIGHT)
+    t.forward(tree_height)
     t.right(90)
-    t.forward(TREE_WIDTH / 2)
+    t.forward(tree_width / 2)
     t.end_fill()
 
     # move to branch location
     t.penup()
     t.right(90)
-    t.forward(TREE_HEIGHT)
+    t.forward(tree_height)
     t.right(90)
     t.pendown()
 
     # draw branches
-    draw_branches(t, TREE_WIDTH * 4)
-    draw_branches(t, TREE_WIDTH * 3)
-    draw_branches(t, TREE_WIDTH * 2)
+    draw_branches(t, tree_width * 4)
+    draw_branches(t, tree_width * 3)
+    draw_branches(t, tree_width * 2)
 
 
 def draw_all_trees(t):
@@ -185,16 +189,18 @@ def draw_all_trees(t):
     draw_tree(t)
 
 
-def draw_window(t):
+def draw_window(t, scale=1):
     """Draw a row of 4 windows
 
     Params:
         t: the Turtle object.
     """
+    window_size= scale*WINDOW_SIZE
+
     t.fillcolor(WINDOW_COLOR)
     t.begin_fill()
     for i in range(4):
-        t.forward(WINDOW_SIZE)
+        t.forward(window_size)
         t.left(90)
     t.end_fill()
 
@@ -246,7 +252,7 @@ def draw_all_windows(t, windows_per_row):
     t.seth(270)
 
 
-def draw_door(t, door_width, door_height):
+def draw_door(t, door_width, door_height, scale=1):
     """Draw door of house, touching the bottom
 
     Params:
@@ -254,6 +260,8 @@ def draw_door(t, door_width, door_height):
         door_width: width of door
         door_height: height of door
     """
+    door_width= scale * door_width
+    door_height= scale * door_height
 
     doorknob = door_width / 15
 
